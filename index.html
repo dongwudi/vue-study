@@ -8,47 +8,19 @@
 </head>
 <body>
   <div id="app">
-    <!-- 文本 -->
-    {{message}} <br>
-    <span v-once>{{message}}</span>
-    <!-- 原始html -->
-      <!-- 双大括号插值 -->
-    <p>using mustaches: {{rawHtml}}</p>
-      <!-- v-html -->
-    <p>using v-html directive: <span v-html="rawHtml"></span></p>
-    <!-- 特性 -->
-    <div v-bind:id="dynamicId">v-bind</div>
-    <button v-bind:disabled="isButtonDisabled">Button</button>
-    <br>
-    <!-- 使用javascript表达式 -->
-    {{number + 1}} <br>
-    {{ok ? 'YES' : 'NO'}} <br>
-    {{message.split('').reverse().join('')}} <br>
-    <div v-bind:id="'list-' + dynamicId">listid</div>
-    <!-- 限制就是，每个绑定都只能包含单个表达式，所以下面的例子都不会生效 -->
-    <!-- 这是语句，不是表达式 -->
-    <!-- {{ var a = 1 }} -->
-    <!-- 流控制也不会生效，请使用三元表达式 -->
-    <!-- {{ if (ok) { return message } }} -->
+      <p>Original message: "{{ message }}"</p>
+      <p>Computed reversed message: "{{ reversedMessage }}"</p>
+      <p>Reversed message: "{{ reversedMessageF() }}"</p>
+      <!-- 计算属性是基于响应式依赖进行缓存的 -->
+      <!-- 只在相关响应式依赖发生改变时它们才会重新求值。这就意味着只要 message 还没有发生改变，
+        多次访问 reversedMessage 计算属性会立即返回之前的计算结果，而不必再次执行函数 -->
+        <p>{{now}}</p>
+        <!-- watch -->
+        {{rem}}
 
-    <!-- 指令 -->
-    <!-- 指令 (Directives) 是带有 v- 前缀的特殊特性 -->
-    <a v-bind:href="url">baidu</a>
-    <a v-on:click="doSomething">doSomething</a>
-    <!-- 动态参数 -->
-    <a v-bind:[attributeName]="url">attributeName</a>
-    <a v-on:[eventName]="doSomething">eventName</a>
-    <!-- 修饰符 -->
-    <form v-on:submit.prevent="onSubmit">
-      <button type="submit">submit</button>
-    </form>
-    <!-- 缩写 -->
-    <!-- v-bind:href="" -- :href= -->
-    <a v-bind:href="url">baidu</a>
-    <a :href="url">baidu</a>
-    <!-- v-on:event="handle" -- @event="handle" -->
-    <a v-on:click="doSomething">doSomething</a>
-    <a @click="doSomething">doSomething</a>
+        firstName:{{firstName}} <br>
+        lastName: {{lastName}} <br>
+        <input v-model="fullName" />
   </div>
 </body>
 </html>

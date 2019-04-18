@@ -4,21 +4,39 @@ const app = new Vue({
   el: '#app',
   data: {
     message: 'hello vue.js!',
-    rawHtml: '<span style="color:red;">this is span</span>',
-    dynamicId: 'tx',
-    isButtonDisabled: true ,//null undefined false
-    number: 1,
-    ok: true,
-    url: 'https://www.baidu.com',
-    attributename: 'href', // 全小写
-    eventname: 'click'
+    rem: '',
+    firstName: 'dong',
+    lastName: 'wudi'
+  },
+  computed: {
+    reversedMessage () {
+      return this.message.split('').reverse().join('')
+    },
+    now () {
+      return Date.now()
+    },
+    fullName: {
+      // getter
+      get () {
+        return this.firstName + ' ' + this.lastName
+      },
+      // setter
+      set (newVal) {
+        let name = newVal.split(' ');
+        this.firstName = name[0];
+        this.lastName = name[name.length - 1];
+      }
+    }
   },
   methods: {
-    doSomething () {
-      console.log('v-on')
-    },
-    onSubmit () {
-      console.log('prevent')
+    reversedMessageF () {
+      return this.message.split('').reverse().join('')
+    }
+  },
+  //初始时不会触发，只有message更新时才会执行
+  watch: {
+    message (val) {
+      this.rem = val.split('').reverse().join('')
     }
   }
 });
