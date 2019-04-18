@@ -1,42 +1,40 @@
 import Vue from 'vue/dist/vue.esm';
 
+// 声明全局组件
+Vue.component('my-component',{
+  template: `<p class="foo bar">Hi</p>`
+})
+
 const app = new Vue({
   el: '#app',
   data: {
     message: 'hello vue.js!',
-    rem: '',
-    firstName: 'dong',
-    lastName: 'wudi'
+    isActive: true,
+    hasError: true,
+    classObject:{
+      active: true,
+      'text-danger': false
+    },
+    activeClass: 'active',
+    errorClass: 'text-danger',
+    activeColor: 'red',
+    fontSize: 12,
+    styleObject: {
+      color: 'red',
+      fontSize: '14px',
+      transform: 'translateX(10px)',
+      transition: 'transform 1s'
+    },
+    overridingStyles: {
+      textDecorationLine: 'line-through'
+    }
   },
   computed: {
-    reversedMessage () {
-      return this.message.split('').reverse().join('')
-    },
-    now () {
-      return Date.now()
-    },
-    fullName: {
-      // getter
-      get () {
-        return this.firstName + ' ' + this.lastName
-      },
-      // setter
-      set (newVal) {
-        let name = newVal.split(' ');
-        this.firstName = name[0];
-        this.lastName = name[name.length - 1];
+    comClassObject () {
+      return {
+        active: this.isActive && !this.hasError,
+        'text-danger': this.hasError
       }
-    }
-  },
-  methods: {
-    reversedMessageF () {
-      return this.message.split('').reverse().join('')
-    }
-  },
-  //初始时不会触发，只有message更新时才会执行
-  watch: {
-    message (val) {
-      this.rem = val.split('').reverse().join('')
     }
   }
 });

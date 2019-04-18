@@ -5,22 +5,41 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,minimum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>vue learn</title>
+  <style>
+    .active{
+      color: lightgreen;
+    }
+    .text-danger {
+      text-decoration-line: line-through;
+    }
+    .static{
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-      <p>Original message: "{{ message }}"</p>
-      <p>Computed reversed message: "{{ reversedMessage }}"</p>
-      <p>Reversed message: "{{ reversedMessageF() }}"</p>
-      <!-- 计算属性是基于响应式依赖进行缓存的 -->
-      <!-- 只在相关响应式依赖发生改变时它们才会重新求值。这就意味着只要 message 还没有发生改变，
-        多次访问 reversedMessage 计算属性会立即返回之前的计算结果，而不必再次执行函数 -->
-        <p>{{now}}</p>
-        <!-- watch -->
-        {{rem}}
+      <!-- v-bind 用于 class 和 style 时，Vue.js 做了专门的增强。
+        表达式结果的类型除了字符串之外，还可以是对象或数组 -->
+        <div v-bind:class="{active: isActive}">class</div>
+        <div class="static" v-bind:class="{active: isActive,'text-danger': hasError}">class</div>
+        <div :class="classObject">class</div>
+        <div :class="comClassObject">class</div>
+        <div :class="[activeClass, errorClass]">class</div>
+        <div :class="[isActive? 'active': 'text-danger','static']">class</div>
+        <div :class="isActive? 'active': 'text-danger'">class</div>
+        <div :class="[{'active': isActive},'static']">class</div>
 
-        firstName:{{firstName}} <br>
-        lastName: {{lastName}} <br>
-        <input v-model="fullName" />
+        <!-- 用在组件上 -->
+        <my-component class="baz boo"></my-component>
+        <my-component class="baz boo" :class="{active: isActive}"></my-component>
+
+        <!-- 内联样式 -->
+        <div :style="{color:activeColor, fontSize: fontSize + 'px'}">style</div>
+        <div :style="styleObject">style</div>
+        <div :style="[styleObject,overridingStyles]">style</div>
+        <!-- 只会渲染数组中最后一个被浏览器支持的值 -->
+        <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }">style</div>
   </div>
 </body>
 </html>
