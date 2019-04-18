@@ -9,27 +9,8 @@
 <body>
   <div id="app">
     {{message}}
-    <br>
-    <!-- v-bind特性：指令--指令带有前缀v- -->
-    <span v-bind:title="date">
-      鼠标悬浮几秒查看动态绑定信息
-    </span>
-    <!-- v-if -->
-    <p v-if="seen" v-on:click="changeSeen()">切换if显示</p>
-    <!-- v-for -->
-    <ul>
-      <li v-for="list in lists">{{list.text}}</li>
-    </ul>
-    <!-- v-on -->
-    <p>{{message}}</p>
-    <button v-on:click="reverseMessage">逆转message</button>
-    <!-- v-model -->
-    <p>message</p>
-    <input v-model="message">
-    <!-- component -->
-    <ol>
-      <todo-item v-for="list in lists" v-bind:list="list" :key="list.id"></todo-item>
-    </ol>
+    <button v-on:click="changeMessage()">update</button>
+    <button v-on:click="destroy()">destroy</button>
   </div>
 </body>
 </html>
