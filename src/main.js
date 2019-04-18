@@ -1,41 +1,31 @@
 import Vue from 'vue/dist/vue.esm';
 
-// 声明全局组件
-Vue.component('my-component',{
-  template: `<p class="foo bar">Hi</p>`
-})
-
 const app = new Vue({
   el: '#app',
   data: {
-    message: 'hello vue.js!',
-    isActive: true,
-    hasError: true,
-    classObject:{
-      active: true,
-      'text-danger': false
-    },
-    activeClass: 'active',
-    errorClass: 'text-danger',
-    activeColor: 'red',
-    fontSize: 12,
-    styleObject: {
-      color: 'red',
-      fontSize: '14px',
-      transform: 'translateX(10px)',
-      transition: 'transform 1s'
-    },
-    overridingStyles: {
-      textDecorationLine: 'line-through'
-    }
+    awesome: true,
+    type: 'A',
+    typeArr: ['A','B','C'],
+    loginType: 'username',
+    ok: true,
+    lists: [
+      {'text':'A',isTrue: true,id:11},
+      {'text':'B',isTrue: false,id:12},
+      {'text':'C',isTrue: true,id:13}
+    ]
   },
-  computed: {
-    comClassObject () {
-      return {
-        active: this.isActive && !this.hasError,
-        'text-danger': this.hasError
-      }
-    }
+  mounted() {
+   setInterval( () => {
+    this.awesome = !this.awesome;
+    let num = Math.floor(Math.random() * 4);
+    console.log(num)
+    this.type = this.typeArr[num]
+   },3000) 
+  },
+  methods: {
+   changeLoginType () {
+     this.loginType = this.loginType === 'username' ? 'email' : 'username';
+   } 
   }
 });
 
