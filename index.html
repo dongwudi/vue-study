@@ -8,102 +8,41 @@
 </head>
 <body>
   <div id="app">
-      <!-- v-model 在内部使用不同的属性为不同的输入元素并抛出不同的事件 -->
-      <!-- text 和 textarea 元素使用 value 属性和 input 事件；
-      checkbox 和 radio 使用 checked 属性和 change 事件；
-      select 字段将 value 作为 prop 并将 change 作为事件 -->
+    <button-counter></button-counter>
+    <button-counter></button-counter>
+    <button-counter></button-counter>
 
-      <input v-model="message" placeholder="edit me">
-      <p>Message is: {{ message }}</p>
 
-      <span>Multiline message is:</span>
-      <p style="white-space: pre-line;">{{ message }}</p>
-      <br>
-      <textarea v-model="message" placeholder="add multiple lines"></textarea>
+    <!-- 通过prop向子组件传递数据 -->
+    <!-- <blog-post :title="title"></blog-post>
+    <blog-post title="this is a title"></blog-post> -->
 
-      <br>
-      <!-- 单个复选框，绑定到布尔值： -->
-      <input type="checkbox" id="checkbox" v-model="checked">
-      <label for="checkbox">{{checked}}</label>
+    <!-- <blog-post v-for="post in posts" :title="post.title" :key="post.id"></blog-post> -->
 
-      <!-- 多个复选框，绑定到同一个数组 -->
-      <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
-      <label for="jack">Jack</label>
-      <input type="checkbox" id="john" value="John" v-model="checkedNames">
-      <label for="john">John</label>
-      <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
-      <label for="mike">Mike</label>
-      <br>
-      <span>Checked names: {{ checkedNames }}</span>
+    <!-- 监听子组件事件 -->
+    <div :style="{ fontSize: postFontSize + 'em' }">
+      <blog-post
+        v-for="post in posts"
+        v-bind:key="post.id"
+        v-bind:post="post"
+        v-on:enlarge-text="postFontSize += $event"
+      ></blog-post>
+    </div>
 
-      <!-- 单选按钮 -->
-      <br>
-      <input type="radio" id="one" value="One" v-model="picked">
-      <label for="one">One</label>
-      <br>
-      <input type="radio" id="two" value="Two" v-model="picked">
-      <label for="two">Two</label>
-      <br>
-      <span>Picked: {{ picked }}</span>
+    <!-- 组件上使用v-model -->
+    <custom-input v-model="searchText"></custom-input>
+    {{searchText}}
 
-      <!-- 选择框 -->
-      <!-- 单选 -->
-      <select v-model="selected">
-        <option disabled value="">请选择</option>
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-      </select>
-      <span>Selected: {{ selected }}</span>
+    <!-- 插槽 -->
+    <alert-box>
+      slot 作用
+    </alert-box>
 
-      <!-- 多选，（绑定到一个数组） -->
-      <select v-model="selectedarr" multiple style="width: 50px;">
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-      </select>
-      <br>
-      <span>Selected: {{ selectedarr }}</span>
+    <ul>
+      <li>li</li>
+      <li is="isli"></li>
+    </ul>
 
-      <!-- v-for渲染 -->
-      <br>
-      <select v-model="selected">
-        <option v-for="option in options" :value="option.value">{{option.text}}</option>
-      </select>
-      {{selected}}
-
-      <!-- 值绑定 -->
-      <!-- 对于单选按钮，复选框及选择框的选项，v-model 绑定的值通常是静态字符串 (对于复选框也可以是布尔值) -->
-      <!-- 当选中时，`radiostr` 为字符串 "a" -->
-      <input type="radio" value="a" v-model="radiostr">
-      {{radiostr}}
-
-      <br>
-      <!-- `toggle` 为 true 或 false -->
-      <input type="checkbox" v-model="toggle">
-      {{toggle}}
-
-      <input
-        type="checkbox"
-        v-model="toggle"
-        true-value="yes"
-        false-value="no"
-      >
-
-      <!-- 修饰符 -->
-      <!-- .lazy  在默认情况下，v-model 在每次 input 事件触发后将输入框的值与数据进行同步 (除了上述输入法组合文字时)。 lazy 修饰符，转变为使用 change 事件进行同步
-      .number 自动将用户的输入值转为数值类型
-      .trim 自动过滤用户输入的首尾空白字符 -->
-      <br>
-      <input type="text" v-model.lazy="msg">
-      {{msg}}
-      <br>
-
-      <input type="number" v-model.number="age">
-      {{age}}
-      <br>
-
-      <input type="text" v-model.trim = "msg">
   </div>
 </body>
 </html>
