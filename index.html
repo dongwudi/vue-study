@@ -5,73 +5,83 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,minimum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>vue learn</title>
-  <style>
-    .active{
-      color: lightgreen;
-    }
-    .text-danger {
-      text-decoration-line: line-through;
-    }
-    .static{
-      font-size: 20px;
-    }
-  </style>
 </head>
 <body>
   <div id="app">
-    <h1 v-if="awesome">vue is awesome!</h1>
-    <h1 v-else>oh no</h1>
-    <!-- v-else 元素必须紧跟在带 v-if 或者 v-else-if 的元素的后面，否则它将不会被识别 -->
+    <!-- 数组 -->
+    <ul>
+      <li v-for="item in items">{{item.message}}</li>
+    </ul>
+    <ul>
+      <li v-for="item,index in items">{{index}}--{{item.message}}</li>
+    </ul>
+    <!-- 对象 -->
+    <ul>
+        <!-- 不要使用对象或数组之类的非原始类型值作为 v-for 的 key。用字符串或数类型的值取而代之 -->
+      <li v-for="(item,key,index) in object" :key="index">
+        {{item}}--{{key}}--{{index}}
+      </li>
+    </ul>
+    <!-- Object.keys() -->
+    <!-- ["firstName", "lastName", "age"] -->
+    <!-- 数组更新检测 -->
+    <!-- 替换数组--变异方法，即会改变原始数组 -->
+    <!-- 
+      push: 在数组末尾添加一项返回新数组的长度
+      pop: 减去末尾项，并返回减去的那一项---会改变原数组
+      shift：减去首项，返回减去的那一项
+      unshift: 添加首项返回新数组的长度
+      splice: 向/从数组中添加/删除项目，然后返回被删除的项目 
+      sort: 从小到大排列
+      reverse：反转数组
+     -->
+     <!-- 非变异方法 -->
+     <!-- 
+      filter
+      concat
+      slice [1,2,3,46,5].slice(0,4)  [1, 2, 3, 46]-->
+     <!-- 以上方法总是返回一个新数组,不会修改原数组 -->
 
-    <!-- 在template上使用v-if -->
-    <template v-if="awesome">
-      <h1>title</h1>
-      <p>paragraph 1</p>
-      <p>paragraph 2</p>
-    </template>
+     <!-- VUE不能检测以下变动的数组 -->
+     <!-- 1.直接用索引设置一个项 -->
+      <!-- 变通方式： -->
+      <!-- app.$set(vm.items,indexofitem,newvalue)
+      vm.items.splice(indexofitem,1,newvalue) -->
+     <!-- 2.修改数组的长度 -->
+        <!-- vm.items.splice(newlength) -->
+      
 
-    <!-- v-else-if -->
-    <div v-if="type === 'A'">
-      A
-    </div>
-    <div v-else-if="type === 'B'">
-      B
-    </div>
-    <div v-else-if="type === 'C'">
-      C
-    </div>
-    <div v-else>
-      Not A/B/C
-    </div>
+      <!-- vue不能检测对象属性的添加或删除 -->
+      <!-- 对于已经创建的实例，Vue 不能动态添加根级别的响应式属性 -->
+      <!-- 可以使用Vue.set(object,key,value)添加响应式属性 -->
+      <!-- Vue.set(app.object,'num',11)
+      app.$set(app.object,'num',11) -->
 
-    <!-- key 复用元素 -->
-    <!-- 不适用key时，复用input导致输入存留问题 -->
-    <template v-if="loginType === 'username'">
-      <label>Username</label>
-      <input placeholder="Enter your username" key="username">
-    </template>
-    <template v-else>
-      <label>Email</label>
-      <input placeholder="Enter your email address" key="email">
-    </template>
-    <button @click="changeLoginType">button</button>
+      <!-- 为已有的对象赋予多个属性 -->
+      <!-- app.object = Object.assign({}, app.object, {
+        end: 27,
+        favoriteColor: 'Vue Green'
+      }) -->
 
-    <!-- v-show -->
-    <!-- 注意，v-show 不支持 <template> 元素，也不支持 v-else -->
-      <h1 v-show="ok">hello! ok</h1>
+      <!-- 显示过滤/排序结果 -->
+      <!-- 计算属性/方法 -->
+      <ul>
+        <li v-for="(n, index) in eventNumbers" :key="index">{{n}}</li>
+      </ul>
+      <ul>
+        <li v-for="n in even(numbers)">{{n}}</li>
+      </ul>
 
-      <!-- v-if vs v-show -->
-      <!-- v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建 -->
-      <!-- v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块 -->
-      <!-- v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换 -->
-      <!-- v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。
-        因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好 -->
+      <!-- v-for on a template -->
+      <ul>
+        <template v-for="item in items">
+          <li>{{ item.message }}</li>
+          <li class="divider" role="presentation">--template</li>
+        </template>
+      </ul>
 
-        <!-- 当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级 -->
-        <!-- 渲染后 vif false的list项就不会渲染 -->
-        <ul>
-          <li v-for="list in lists" :key="list.id" v-if="list.isTrue">{{list.text}}</li>
-        </ul>
+      <!-- 一个组件的vfor -->
+      <my-c v-for="item,index in items" :msg="item.message" :key="index"></my-c>
   </div>
 </body>
 </html>

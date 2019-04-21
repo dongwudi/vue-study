@@ -1,32 +1,38 @@
 import Vue from 'vue/dist/vue.esm';
 
+Vue.component('my-c',{
+  props: ['msg'],
+  template: `<li>this is my-c {{msg}}</li>`
+})
+
 const app = new Vue({
   el: '#app',
   data: {
-    awesome: true,
-    type: 'A',
-    typeArr: ['A','B','C'],
-    loginType: 'username',
-    ok: true,
-    lists: [
-      {'text':'A',isTrue: true,id:11},
-      {'text':'B',isTrue: false,id:12},
-      {'text':'C',isTrue: true,id:13}
-    ]
+    items: [
+      { message: 'Foo' },
+      { message: 'Bar' }
+    ],
+    object: {
+      firstName: 'John',
+      lastName: 'Doe',
+      age: 30
+    },
+    numbers: [1,2,3,4,5]
   },
-  mounted() {
-   setInterval( () => {
-    this.awesome = !this.awesome;
-    let num = Math.floor(Math.random() * 4);
-    console.log(num)
-    this.type = this.typeArr[num]
-   },3000) 
+  computed: {
+    eventNumbers: function() {
+      return this.numbers.filter((number)=>{
+        return number % 2 === 0
+      })
+    }
   },
   methods: {
-   changeLoginType () {
-     this.loginType = this.loginType === 'username' ? 'email' : 'username';
-   } 
-  }
+    even: function (numbers) {
+      return numbers.filter((number)=>{
+        return number % 2 === 0
+      })
+    }
+  },
 });
 
 window.app = app;
