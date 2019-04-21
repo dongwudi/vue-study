@@ -5,83 +5,64 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,minimum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>vue learn</title>
+  <style>
+    .over{
+      width: 100px;
+      height: 100px;
+      overflow: scroll;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-    <!-- 数组 -->
-    <ul>
-      <li v-for="item in items">{{item.message}}</li>
-    </ul>
-    <ul>
-      <li v-for="item,index in items">{{index}}--{{item.message}}</li>
-    </ul>
-    <!-- 对象 -->
-    <ul>
-        <!-- 不要使用对象或数组之类的非原始类型值作为 v-for 的 key。用字符串或数类型的值取而代之 -->
-      <li v-for="(item,key,index) in object" :key="index">
-        {{item}}--{{key}}--{{index}}
-      </li>
-    </ul>
-    <!-- Object.keys() -->
-    <!-- ["firstName", "lastName", "age"] -->
-    <!-- 数组更新检测 -->
-    <!-- 替换数组--变异方法，即会改变原始数组 -->
+    <button @click="addCounter">add 1</button>
+    <p>this button above has been clicked {{counter}} times</p>
+    <button @click="addCounter1(5)">add 5</button>
+    <p>this button above has been clicked {{counter}} *  {{n}} times</p>
+
+    <!-- 事件修饰符 -->
     <!-- 
-      push: 在数组末尾添加一项返回新数组的长度
-      pop: 减去末尾项，并返回减去的那一项---会改变原数组
-      shift：减去首项，返回减去的那一项
-      unshift: 添加首项返回新数组的长度
-      splice: 向/从数组中添加/删除项目，然后返回被删除的项目 
-      sort: 从小到大排列
-      reverse：反转数组
-     -->
-     <!-- 非变异方法 -->
-     <!-- 
-      filter
-      concat
-      slice [1,2,3,46,5].slice(0,4)  [1, 2, 3, 46]-->
-     <!-- 以上方法总是返回一个新数组,不会修改原数组 -->
+    .stop  阻止单击事件继续传播,冒泡
+    .prevent  阻止默认事件
+    .capture  即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 
+    .self  只当在 event.target 是当前元素自身时触发处理函数
+    .once  点击事件将只会触发一次
+    .passive  滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 
+  -->
+ 
+    <div class="pa" @click="do1">
+        pa
+        <div @click.self="dothat">
+          dothat
+          <a @click.stop = 'doThis'>dothis</a>
+          <a @click.once.stop = 'dononce'>once</a>
+          <a href="#" @click.prevent = "dothat">prevent</a>
+        </div>
+    </div>
 
-     <!-- VUE不能检测以下变动的数组 -->
-     <!-- 1.直接用索引设置一个项 -->
-      <!-- 变通方式： -->
-      <!-- app.$set(vm.items,indexofitem,newvalue)
-      vm.items.splice(indexofitem,1,newvalue) -->
-     <!-- 2.修改数组的长度 -->
-        <!-- vm.items.splice(newlength) -->
-      
+    <div class="over" @scroll.passive='scrollev'>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+      <span>滚动事件的默认行为 (即滚动行为) 将会立即触发 ,而不会等待 `onScroll` 完成 </span>
+    </div>
 
-      <!-- vue不能检测对象属性的添加或删除 -->
-      <!-- 对于已经创建的实例，Vue 不能动态添加根级别的响应式属性 -->
-      <!-- 可以使用Vue.set(object,key,value)添加响应式属性 -->
-      <!-- Vue.set(app.object,'num',11)
-      app.$set(app.object,'num',11) -->
+    <!-- 按键修饰符 -->
+    <input type="text" @keyup.enter = "keyenv">
 
-      <!-- 为已有的对象赋予多个属性 -->
-      <!-- app.object = Object.assign({}, app.object, {
-        end: 27,
-        favoriteColor: 'Vue Green'
-      }) -->
+    <!-- .exact 修饰符允许你控制由精确的系统修饰符组合触发的事件。 -->
+    <!-- 即使 Alt 或 Shift 被一同按下时也会触发 -->
+    <!-- <button @click.ctrl="onClick">A</button> -->
 
-      <!-- 显示过滤/排序结果 -->
-      <!-- 计算属性/方法 -->
-      <ul>
-        <li v-for="(n, index) in eventNumbers" :key="index">{{n}}</li>
-      </ul>
-      <ul>
-        <li v-for="n in even(numbers)">{{n}}</li>
-      </ul>
+    <!-- 有且只有 Ctrl 被按下的时候才触发 -->
+    <!-- <button @click.ctrl.exact="onCtrlClick">A</button> -->
 
-      <!-- v-for on a template -->
-      <ul>
-        <template v-for="item in items">
-          <li>{{ item.message }}</li>
-          <li class="divider" role="presentation">--template</li>
-        </template>
-      </ul>
-
-      <!-- 一个组件的vfor -->
-      <my-c v-for="item,index in items" :msg="item.message" :key="index"></my-c>
+    <!-- 没有任何系统修饰符被按下的时候才触发 -->
+    <!-- <button @click.exact="onClick">A</button> -->
   </div>
 </body>
 </html>

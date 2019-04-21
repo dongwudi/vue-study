@@ -1,38 +1,39 @@
 import Vue from 'vue/dist/vue.esm';
 
-Vue.component('my-c',{
-  props: ['msg'],
-  template: `<li>this is my-c {{msg}}</li>`
-})
-
 const app = new Vue({
   el: '#app',
   data: {
-    items: [
-      { message: 'Foo' },
-      { message: 'Bar' }
-    ],
-    object: {
-      firstName: 'John',
-      lastName: 'Doe',
-      age: 30
-    },
-    numbers: [1,2,3,4,5]
-  },
-  computed: {
-    eventNumbers: function() {
-      return this.numbers.filter((number)=>{
-        return number % 2 === 0
-      })
-    }
+    counter: 0,
+    n: 0
   },
   methods: {
-    even: function (numbers) {
-      return numbers.filter((number)=>{
-        return number % 2 === 0
-      })
+    addCounter (ev) {
+      console.log(ev.target.tagName)
+      this.counter ++;
+    },
+    addCounter1 (n) {
+      this.n = n;
+      this.counter += n;
+    },
+    doThis () {
+      console.log('dothis')
+    },
+    do1(){
+      console.log('do')
+    },
+    dothat(){
+      console.log('dothat')
+    },
+    dononce(){
+      console.log('doonce')
+    },
+    scrollev(){
+      console.log('1')
+    },
+    keyenv(){
+      console.log('keyup')
     }
-  },
+  }
 });
 
 window.app = app;
