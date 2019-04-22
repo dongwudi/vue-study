@@ -8,21 +8,25 @@
 </head>
 <body>
   <div id="app">
-    <!-- 组件名：字母全小写且必须包含一个连字符 -->
-    <my-component></my-component>
-    <my-component-b></my-component-b>
+    <blog-post post-title="this is titles"></blog-post>
 
-    <my-component>
-      <my-component-b></my-component-b>
-    </my-component>
+    <!-- 即便 `12` 是静态的，我们仍然需要 `v-bind` 来告诉 Vue ,这是一个表达式而不是字符串-->
+    <props-o title="string" :num="12"></props-o>
+    <props-o title="string" :num="number"></props-o>
 
-    <component-a></component-a>
-    <component-b></component-b>
+    <props-p :number="173"></props-p>
 
-    <!-- 自动化全局注册 -->
-    <base-button></base-button>
-    <base-input></base-input>
-    <base-icon></base-icon>
+    <props-y
+      :prop-a='2'
+      prop-c="23"
+    ></props-y>
+
+    <!-- 非prop特性 -->
+    <!-- 自动添加unprop='un-pp'到组件根元素 -->
+    <props-p unprop="un-pp" :number="173"></props-p>
+
+    <!-- 禁用特性继承 -->
+    <base-input label="label" aa="this is aa" placeholder="Enter your username"></base-input>
   </div>
 </body>
 </html>

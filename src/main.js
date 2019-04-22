@@ -1,76 +1,102 @@
 import Vue from 'vue/dist/vue.esm';
-import ComponentA from '../components/ComponentA';
-import ComponentB from '../components/ComponentB';
 
-import {upperFirst,camelCase} from 'lodash';
-// 全局注册
-// 全局注册的组件可以用在任何新创建的Vue根实例的模板中，以及所有子组件中
-Vue.component('my-component',{
+Vue.component('blog-post', {
+  // 在 JavaScript 中是 camelCase 的
+  props: ['postTitle'],
+  template: '<h3>{{ postTitle }}</h3>'
+})
+
+// 对象形式的props类型,指定props类型
+Vue.component('props-o', {
+  // 在 JavaScript 中是 camelCase 的
+  props: {
+    title: String,
+    num: Number
+  },
+  template: '<h3>{{ title }}----{{num}}</h3>'
+})
+
+// 单向数据流
+// 不应该在子组件中修改prop
+// 可以将其作为本地数据进行修改，或者使用计算属性
+Vue.component('props-p', {
+  props: ['number'],
+  template: '<h3>{{counter}}--{{comcounter}}</h3>',
+  data () {
+    return {
+      counter : this.number
+    }
+  },
+  computed: {
+    comcounter () {
+      let count = this.number;
+      return count.toString().split('').sort().join('')
+    }
+  }
+})
+
+// 验证要求
+// 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+Vue.component('props-y', {
+  props: {
+    propA: Number,
+    // 多个可能的类型
+    propB: [String, Number],
+    // 必填的字符串
+    propC: {
+      type: String,
+      required: true
+    },
+    // 带有默认值的数字
+    propD: {
+      type: Number,
+      default: 100
+    },
+    // 带有默认值的对象
+    propE: {
+      type: Object,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: function () {
+        return { message: 'hello' }
+      }
+    },
+    // 自定义验证函数
+    propF: {
+      validator: function (value) {
+        // 这个值必须匹配下列字符串中的一个
+        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+      }
+    }
+  },
+  template: `<div>{{propA}}--{{propC}}--{{propD}}</div>`
+})
+
+// 禁用特性继承 inheritAttrs: false
+// 尤其适合配合实例的 $attrs 属性使用，该属性包含了传递给一个组件的特性名和特性值
+// $attrs 将父组件属性传递给子组件 -- 除去props中的属性
+Vue.component('base-input', {
+  inheritAttrs: false,
+  props: ['label', 'value'],
   template: `
-    <div>
-      <div>this is a my-componet</div>
-      <slot></slot>
-    </div>
-  `
-})
-
-Vue.component('my-component-b',{
-  template: `<div>this is a my-componet-b</div>`
-})
-
-// 局部注册
-// 如果使用webpack构建工具，全局注册会导致不使用此组件依然被包含进入构建文件中
-// ComponentA --> components: {'component-a':ComponentA}
-// 局部注册的组件在其子组件中不可用
-// 如果希望 ComponentA 在 ComponentB 中可用
-// 必须要在B中注册才可以使用
-// var ComponentA = {
-//   template: `<div>this is component-a</div>`
-// }
-
-//基础组件的自动化全局注册
-const requireComponent = require.context(
-  '../components',
-  //是否查询其子目录
-  false,
-  // 匹配基础组件文件名的规则
-  /Base[A-Z]\w+\.(vue|js)$/
-)
-
-// console.log(Object.keys(requireComponent)) //keys resolve id
-
-requireComponent.keys().forEach(fileName => {
-  console.log(fileName)
-  //获取组件配置
-  const componentConfig = requireComponent(fileName)
-  //获取组件的PascalCase命名
-  const componentName = upperFirst(
-    camelCase(
-      // 获取和目录深度无关的文件名
-      fileName
-        .split('/')
-        .pop()
-        .replace(/\.\w+$/, '')
-    )
-  )
-  // 全局注册组件
-  Vue.component(
-    componentName,
-    // 如果这个组件选项是通过 `export default` 导出的，
-    // 那么就会优先使用 `.default`，
-    // 否则回退到使用模块的根。
-    componentConfig.default || componentConfig
-  )
+    <label>
+      {{ label }}
+      <input
+        v-bind="$attrs"
+        v-bind:value="value"
+        v-on:input="$emit('input', $event.target.value)"
+      >
+    </label>
+  `,
+  created () {
+    console.log(this.$attrs)
+    //{aa: "this is aa", placeholder: "Enter your username"}
+  }
 })
 
 const app = new Vue({
   el: '#app',
   data: {
-
-  },
-  components : {
-    'component-a': ComponentA,
-    'component-b': ComponentB
+    number: 1
   }
 });
 
