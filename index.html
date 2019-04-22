@@ -8,41 +8,15 @@
 </head>
 <body>
   <div id="app">
-    <button-counter></button-counter>
-    <button-counter></button-counter>
-    <button-counter></button-counter>
+    <!-- 组件名：字母全小写且必须包含一个连字符 -->
+    <my-component></my-component>
+    <my-component-b></my-component-b>
 
+    <my-component>
+      <my-component-b></my-component-b>
+    </my-component>
 
-    <!-- 通过prop向子组件传递数据 -->
-    <!-- <blog-post :title="title"></blog-post>
-    <blog-post title="this is a title"></blog-post> -->
-
-    <!-- <blog-post v-for="post in posts" :title="post.title" :key="post.id"></blog-post> -->
-
-    <!-- 监听子组件事件 -->
-    <div :style="{ fontSize: postFontSize + 'em' }">
-      <blog-post
-        v-for="post in posts"
-        v-bind:key="post.id"
-        v-bind:post="post"
-        v-on:enlarge-text="postFontSize += $event"
-      ></blog-post>
-    </div>
-
-    <!-- 组件上使用v-model -->
-    <custom-input v-model="searchText"></custom-input>
-    {{searchText}}
-
-    <!-- 插槽 -->
-    <alert-box>
-      slot 作用
-    </alert-box>
-
-    <ul>
-      <li>li</li>
-      <li is="isli"></li>
-    </ul>
-
+    <component-a></component-a>
   </div>
 </body>
 </html>
