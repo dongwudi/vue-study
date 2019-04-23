@@ -1,103 +1,105 @@
 import Vue from 'vue/dist/vue.esm';
 
-Vue.component('blog-post', {
-  // 在 JavaScript 中是 camelCase 的
-  props: ['postTitle'],
-  template: '<h3>{{ postTitle }}</h3>'
-})
-
-// 对象形式的props类型,指定props类型
-Vue.component('props-o', {
-  // 在 JavaScript 中是 camelCase 的
+Vue.component('base-checkbox', {
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
   props: {
-    title: String,
-    num: Number
+    checked: Boolean
   },
-  template: '<h3>{{ title }}----{{num}}</h3>'
-})
-
-// 单向数据流
-// 不应该在子组件中修改prop
-// 可以将其作为本地数据进行修改，或者使用计算属性
-Vue.component('props-p', {
-  props: ['number'],
-  template: '<h3>{{counter}}--{{comcounter}}</h3>',
-  data () {
-    return {
-      counter : this.number
-    }
-  },
-  computed: {
-    comcounter () {
-      let count = this.number;
-      return count.toString().split('').sort().join('')
-    }
-  }
-})
-
-// 验证要求
-// 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
-Vue.component('props-y', {
-  props: {
-    propA: Number,
-    // 多个可能的类型
-    propB: [String, Number],
-    // 必填的字符串
-    propC: {
-      type: String,
-      required: true
-    },
-    // 带有默认值的数字
-    propD: {
-      type: Number,
-      default: 100
-    },
-    // 带有默认值的对象
-    propE: {
-      type: Object,
-      // 对象或数组默认值必须从一个工厂函数获取
-      default: function () {
-        return { message: 'hello' }
-      }
-    },
-    // 自定义验证函数
-    propF: {
-      validator: function (value) {
-        // 这个值必须匹配下列字符串中的一个
-        return ['success', 'warning', 'danger'].indexOf(value) !== -1
-      }
-    }
-  },
-  template: `<div>{{propA}}--{{propC}}--{{propD}}</div>`
-})
-
-// 禁用特性继承 inheritAttrs: false
-// 尤其适合配合实例的 $attrs 属性使用，该属性包含了传递给一个组件的特性名和特性值
-// $attrs 将父组件属性传递给子组件 -- 除去props中的属性
-Vue.component('base-input', {
-  inheritAttrs: false,
-  props: ['label', 'value'],
   template: `
-    <label>
-      {{ label }}
+    <label for="checkbox">
       <input
-        v-bind="$attrs"
-        v-bind:value="value"
-        v-on:input="$emit('input', $event.target.value)"
+        id="checkbox"
+        type="checkbox"
+        v-bind:checked="checked"
+        v-on:change="$emit('change', $event.target.checked)"
       >
+      lovingVue--{{checked}}
     </label>
-  `,
-  created () {
-    console.log(this.$attrs)
-    //{aa: "this is aa", placeholder: "Enter your username"}
+  `
+})
+
+Vue.component('base-input',{
+  template: `<input type="text"/>`
+})
+
+Vue.component('base-inputlabel',{
+  props:['lovingVue','value'],
+  template: `
+  <label for="input">
+    <input
+      id="input"
+      v-bind="$attrs"
+      v-bind:value="value"
+      v-on:input="$emit('input', $event.target.value)"
+    >
+    {{lovingVue}}
+  </label>
+  `
+})
+
+// $listeners
+Vue.component('listener-input',{
+  inheritAttrs: false,
+  props: ['label','value'],
+  computed: {
+    inputListeners () {
+      var vm = this;
+      console.log(this.$listners)
+      return Object.assign({},
+        // 我们从父级添加所有的监听器
+        this.$listners,
+        // 然后我们添加自定义监听器，
+        // 或覆写一些监听器的行为
+        {
+          // 这里确保组件配合 `v-model` 的工作
+          input: function (event) {
+            // console.log(event)
+            vm.$emit('input', event.target.value)
+          }
+        }
+        )
+    }
+  },
+  template: `
+  <label>
+    {{ label }}--    {{value}}
+    <input
+      v-bind="$attrs"
+      v-bind:value="value"
+      v-on="inputListeners"
+    >
+  </label>
+  `
+})
+
+Vue.component('text-doc',{
+  props:['title'],
+  template: `<div @click="updateTitle">{{title}}</div>`,
+  methods: {
+    updateTitle(){
+      this.$emit('update:title','this is new title')
+    }
   }
 })
 
 const app = new Vue({
   el: '#app',
   data: {
-    number: 1
-  }
+    lovingVue: true,
+    value: 'please',
+    tit: 'this is old title'
+  },
+  methods: {
+    onFocus () {
+      console.log(1)
+    },
+    updateFn($event) {
+      console.log($event)
+    }
+  },
 });
 
 window.app = app;
