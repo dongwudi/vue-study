@@ -28,6 +28,16 @@ Vue.component(
   () => import('../components/my-async-component')
 )
 
+const LoadingComponent = {
+  template: `this is LoadingComponent`
+}
+
+const ErrorComponent = {
+  template: `this is ErrorComponent`
+}
+
+
+// 当使用局部注册的时候，你也可以直接提供一个返回 Promise 的函数：
 const app = new Vue({
   el: '#app',
   data: {
@@ -35,7 +45,8 @@ const app = new Vue({
   },
   components:{
     PostsCom,
-    ArchiveCim
+    ArchiveCim,
+    'my-component': () => import('../components/my-async-component')
   }
 });
 
