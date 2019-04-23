@@ -1,52 +1,40 @@
 import Vue from 'vue/dist/vue.esm';
 
-import PostsCom from '../components/PostsCom';
-import ArchiveCim from '../components/ArchiveCim';
+import ChildCom from '../components/ChildCom';
+import ParentCom from '../components/ParentCom';
+import StaticCom from '../components/StaticCom'
 
-// Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义。
-// Vue 只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染
-// Vue.component('async-example',function(resolve, reject){
-//   setTimeout(function () {
-//     // 向 `resolve` 回调传递组件定义
-//     resolve({
-//       template: '<div>I am async!</div>'
-//     })
-//   }, 1000)
-// })
-
-// Vue.component('async-webpack-example', function (resolve) {
-//   // 这个特殊的 `require` 语法将会告诉 webpack
-//   // 自动将你的构建代码切割成多个包，这些包
-//   // 会通过 Ajax 请求加载
-//   require(['../components/my-async-component'], resolve)
-// })
-
-
-Vue.component(
-  'async-webpack-example',
-  // 这个 `import` 函数会返回一个 `Promise` 对象。
-  () => import('../components/my-async-component')
-)
-
-const LoadingComponent = {
-  template: `this is LoadingComponent`
-}
-
-const ErrorComponent = {
-  template: `this is ErrorComponent`
-}
-
-
-// 当使用局部注册的时候，你也可以直接提供一个返回 Promise 的函数：
 const app = new Vue({
   el: '#app',
   data: {
-    currentTabComponent: 'archive-cim'
+    foo: 1
   },
-  components:{
-    PostsCom,
-    ArchiveCim,
-    'my-component': () => import('../components/my-async-component')
+  computed: {
+    bar () {
+      return this.foo + 1;
+    }
+  },
+  methods: {
+    baz () {
+      console.log('baz')
+    },
+    cons () {
+      console.log(this.$refs.childref)
+      this.$refs.childref.num = 12;
+    }
+  },
+  components: {
+    ChildCom,
+    ParentCom,
+    StaticCom
+  },
+  // 更深层级的嵌套组件上可以通过 provide inject来解决交互问题
+  //provide  允许我们指定我们想要提供给后代组件的数据/方法
+  //在任何后代组件中 使用inject来接收要使用的指定方法 
+  provide: function () {
+    return {
+      cons: this.cons
+    }
   }
 });
 

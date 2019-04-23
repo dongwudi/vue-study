@@ -8,20 +8,26 @@
 </head>
 <body>
   <div id="app">
-      <button @click="currentTabComponent='posts-com'">posts</button>
-      <button @click="currentTabComponent='archive-cim'">archive</button>
-      <component v-bind:is="currentTabComponent"></component>
+    foo--{{foo}}
+    <child-com ref='childref'></child-com>
+    <parent-com></parent-com>
 
-      <keep-alive>
-          <component v-bind:is="currentTabComponent"></component>
-      </keep-alive>
+    <!-- ref特性 访问子组件实例或子元素 -->
+    <button @click="cons">打印</button>
 
-      <!-- 异步组件 -->
-      <!-- <async-example></async-example> -->
+    <!-- 内联模板 -->
+    <!-- 当 inline-template 这个特殊的特性出现在一个子组件上时，这个组件将会使用其里面的内容作为模板，
+    而不是将其作为被分发的内容。这使得模板的撰写工作更加灵活 -->
+    <child-com inline-template>
+      <div>
+          <p>These are compiled as the component's own template.</p>
+          <p>Not parent's transclusion content.</p>
+      </div>
+    </child-com>
 
-      <async-webpack-example></async-webpack-example>
 
-      <my-component></my-component>
+    <!-- 组件包含了大量静态内容。在这种情况下，你可以在根元素上添加 v-once 特性以确保这些内容只计算一次然后缓存起来 -->
+    <static-com></static-com>
 
   </div>
 </body>
