@@ -1,105 +1,75 @@
 import Vue from 'vue/dist/vue.esm';
 
-Vue.component('base-checkbox', {
-  model: {
-    prop: 'checked',
-    event: 'change'
-  },
-  props: {
-    checked: Boolean
-  },
+Vue.component('navigation-link',{
+  props:['url'],
   template: `
-    <label for="checkbox">
-      <input
-        id="checkbox"
-        type="checkbox"
-        v-bind:checked="checked"
-        v-on:change="$emit('change', $event.target.checked)"
-      >
-      lovingVue--{{checked}}
-    </label>
-  `
-})
-
-Vue.component('base-input',{
-  template: `<input type="text"/>`
-})
-
-Vue.component('base-inputlabel',{
-  props:['lovingVue','value'],
-  template: `
-  <label for="input">
-    <input
-      id="input"
-      v-bind="$attrs"
-      v-bind:value="value"
-      v-on:input="$emit('input', $event.target.value)"
+    <a
+      v-bind:href="url"
+      class="nav-link"
     >
-    {{lovingVue}}
-  </label>
-  `
+      <slot></slot>
+    </a>
+`
 })
 
-// $listeners
-Vue.component('listener-input',{
-  inheritAttrs: false,
-  props: ['label','value'],
-  computed: {
-    inputListeners () {
-      var vm = this;
-      console.log(this.$listners)
-      return Object.assign({},
-        // 我们从父级添加所有的监听器
-        this.$listners,
-        // 然后我们添加自定义监听器，
-        // 或覆写一些监听器的行为
-        {
-          // 这里确保组件配合 `v-model` 的工作
-          input: function (event) {
-            // console.log(event)
-            vm.$emit('input', event.target.value)
-          }
-        }
-        )
+// 后备内容
+// 在父级组件中使用此组件并且不提供任何插槽内容时，
+// 后备内容被渲染，提供内容则提供的内容将取代后备内容
+Vue.component('navigation-link1',{
+  props:['url'],
+  template: `
+    <a
+      v-bind:href="url"
+      class="nav-link"
+    >
+      <slot>后备内容</slot>
+    </a>
+`
+})
+
+// 具名插槽
+// 一个不带 name 的 <slot> 出口会带有隐含的名字“default”
+Vue.component('navigation-link2',{
+  props:[],
+  template: `
+    <div>
+      <div class="header"><slot name="header"></slot></div>
+      <slot name="main"></slot>
+      <slot name="footer"></slot>
+      <slot></slot>
+    </div>
+`
+})
+
+// 插槽 prop
+Vue.component('navigation-link3',{
+  data () {
+    return {
+      user: {
+        firstName:"dong",
+        lastName:"wd"
+      },
+      other: {
+        a: 1
+      }
     }
   },
+  props:[],
+  // 为了让 user 在父级的插槽内容可用，我们可以将 user 作为一个 <slot> 元素的特性绑定上去
+  // 然后在父级作用域中，我们可以给 v-slot 带一个值来定义我们提供的插槽 prop 的名字
   template: `
-  <label>
-    {{ label }}--    {{value}}
-    <input
-      v-bind="$attrs"
-      v-bind:value="value"
-      v-on="inputListeners"
-    >
-  </label>
-  `
-})
-
-Vue.component('text-doc',{
-  props:['title'],
-  template: `<div @click="updateTitle">{{title}}</div>`,
-  methods: {
-    updateTitle(){
-      this.$emit('update:title','this is new title')
-    }
-  }
+    <div>
+      <slot name="main" v-bind:user="user">{{user.firstName}}</slot>
+      <slot v-bind:user="user" ></slot>
+    </div>
+`
 })
 
 const app = new Vue({
   el: '#app',
   data: {
-    lovingVue: true,
-    value: 'please',
-    tit: 'this is old title'
-  },
-  methods: {
-    onFocus () {
-      console.log(1)
-    },
-    updateFn($event) {
-      console.log($event)
-    }
-  },
+    dtname: 'main'
+  }
 });
 
 window.app = app;
