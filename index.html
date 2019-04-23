@@ -8,91 +8,18 @@
 </head>
 <body>
   <div id="app">
-    <navigation-link url="/profile">
-      Your Profile 
-    </navigation-link>
+      <button @click="currentTabComponent='posts-com'">posts</button>
+      <button @click="currentTabComponent='archive-cim'">archive</button>
+      <component v-bind:is="currentTabComponent"></component>
 
-    <!-- <navigation-link url="/profile">
-      Your Profile {{url}}
-    </navigation-link> -->
-    <!--规则： 父级模板里的所有内容都是在父级作用域中编译的；子模板里的所有内容都是在子作用域中编译的 -->
+      <keep-alive>
+          <component v-bind:is="currentTabComponent"></component>
+      </keep-alive>
 
-    <!-- 后备内容 -->
-    <navigation-link1 url="/profile">
-    </navigation-link1>
-    <navigation-link1 url="/profile">
-      Your Profile 1
-    </navigation-link1>
+      <!-- 异步组件 -->
+      <!-- <async-example></async-example> -->
 
-    <!-- 如果我们需要多个插槽，slot元素的特殊特性：name可以进行定义 -->
-    <navigation-link2>
-      <template v-slot:header>
-        <div>
-          this is header
-        </div>
-      </template>
-      <template v-slot:main>
-        <div>
-          this is main
-        </div>
-      </template>
-      <template v-slot:footer>
-        <div>
-          this is footer
-        </div>
-      </template>
-      default第一种写法：this is default 
-      <!-- default第二种写法： -->
-      <!-- <template v-slot:default>
-        <div>
-          this is default
-        </div>
-      </template> -->
-    </navigation-link2>
-
-    <!-- 作用域插槽 -->
-    <!-- 有时让插槽内容能够访问子组件中才有的数据是很有用的 -->
-    <navigation-link3>
-      <template v-slot:main="slotProps">
-        {{slotProps}}
-        <br>
-        {{ slotProps.user.lastName }}
-      </template>
-      this is default
-    </navigation-link3>
-
-    <!-- 当被提供的内容只有默认插槽时，组件的标签可以直接被当作插槽的模板 -->
-    <!-- 可以注意到：main的备用内容显示了出来，也就是说被提供的内容为默认内容就可以这样采用这样缩写语法 -->
-    <navigation-link3 v-slot="slotProps">
-        {{ slotProps }}
-    </navigation-link3>
-
-    <!-- 解构插槽prop -->
-    <navigation-link3 v-slot="{user}">
-        {{ user }}
-    </navigation-link3>
-    <!-- 还开启了prop重命名 -->
-    <navigation-link3 v-slot="{user:pers}">
-        {{ pers }} -- 重命名
-    </navigation-link3>
-
-    <!-- 动态插槽 -->
-    <navigation-link3>
-      <template v-slot:[dtname]>
-
-      </template>
-       动态
-    </navigation-link3>
-
-    <!-- 具名插槽缩写 -->
-    <navigation-link3>
-        <template #main>
-            v-slot:main ==> #main
-        </template>
-        <template #default>
-            希望使用缩写的话，你必须始终有明确插槽名 #default
-        </template>
-      </navigation-link3>
+      <async-webpack-example></async-webpack-example>
   </div>
 </body>
 </html>
