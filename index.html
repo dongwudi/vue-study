@@ -10,7 +10,14 @@
   <div id="app">
     <h1>hello vue-router</h1>
     <p>
-        <!-- <router-link to="/user/foo">Go to user foo</router-link> -->
+        <!-- <router-link :to="{name: 'user',params:{id: 'foo'}}">Go to user foo</router-link> -->
+        <!-- 等同于 -->
+        <!-- router.push({
+          name: 'user',
+          params: {
+            id: 'foo'
+          }
+        }) -->
     </p>
     <div id="load"></div>
       <!-- 路由出口 -->

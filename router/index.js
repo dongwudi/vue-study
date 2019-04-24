@@ -12,10 +12,6 @@ const routes = [
     name: 'user',
     path:'/user/:id',
     component: user
-  },
-  {
-    path: '/register',
-    component: register
   }
 ]
 
