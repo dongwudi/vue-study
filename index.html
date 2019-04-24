@@ -8,20 +8,17 @@
 </head>
 <body>
   <div id="app">
-    <h1>hello vue-router</h1>
-    <p>
-        <!-- <router-link :to="{name: 'user',params:{id: 'foo'}}">Go to user foo</router-link> -->
-        <!-- 等同于 -->
-        <!-- router.push({
-          name: 'user',
-          params: {
-            id: 'foo'
-          }
-        }) -->
-    </p>
-    <div id="load"></div>
-      <!-- 路由出口 -->
-      <router-view></router-view>
+    <!-- 命名视图 -->
+    <!-- 如果 router-view 没有设置名字，那么默认为 default -->
+    <!-- 一个视图使用一个组件渲染，因此对于同个路由，多个视图就需要多个组件。 -->
+  <router-view class="view one"></router-view>
+  <router-view class="view two" name="main"></router-view>
+  <router-view class="view three" name="slider"></router-view>
+   
+ <hr>
+ <!-- 嵌套命名视图 -->
+ 
+
   </div>
 </body>
 </html>

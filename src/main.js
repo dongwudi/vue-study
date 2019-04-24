@@ -10,13 +10,6 @@ const app = new Vue({
   mounted() {
     console.log(this.$route)
     console.log(this.$router)
-
-    router.push({
-      name: 'user',
-      params: {
-        id: 'foo'
-      }
-    }) 
   },
 });
 
