@@ -1,6 +1,6 @@
 export default {
   template: `
   <div>
-    default
+    default {{$route.params.id}}
   </div>`
 }
