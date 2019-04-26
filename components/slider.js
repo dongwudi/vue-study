@@ -1,6 +1,7 @@
 export default {
+  props: ['id'],
   template: `
   <div>
-    slider
+    slider {{id}}
   </div>`
 }

@@ -1,6 +1,10 @@
 export default {
+  props: ['id'],
   template: `
   <div>
-    main
-  </div>`
+    main {{id}}
+  </div>`,
+  mounted() {
+    // console.log(this)
+  }
 }

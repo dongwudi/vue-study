@@ -14,49 +14,34 @@ const routes = [
     path: '/',
     component: main
   },
+  // / 对于包含命名视图的路由，你必须分别为每个命名视图添加 `props` 选项：
   {
-    path: '/slider',
-    component: slider
-  },
-  // {
-  //   name: 'foo',
-  //   path: '/other/:id',
-  //   component: fault
-  // },
-  //1.
-  // {
-  //   path: '/child',
-  //   redirect: '/other'
-  // }
-  //2.重定向到命名路由
-  // { path: '/child', 
-  //   redirect: 
-  //   { name: 'foo' }
-  // }
-  // 3.甚至是一个方法，动态返回重定向目标
-    // { path: '/child', redirect: to => {
-    //   // 方法接收 目标路由 作为参数
-    //   // return 重定向的 字符串路径/路径对象
-    //   console.log(to);
-    //   // return '/other';
-    //   return {
-    //     name: 'foo'
-    //   }
-    // }}
-    // 4.参数
-    // {
-    //   path: '/child/:id',
-    //   redirect: '/other/:id'
-    // }
-
-    // 别名 /a 的别名是 /b，意味着，当用户访问 /b 时，URL 会保持为 /b，但是路由匹配则为 /a
-    {
-      path: '/child/:id',
-      component: fault,
-      alias: '/alias/:id'
+    path: '/slider/:id',
+    components: {
+      default: main,
+      slider: slider
     },
-
-
+    props:{
+      default: true,
+      slider: true
+    }
+  },
+  {
+    path: '/child/:id',
+    component: fault,
+    //如果 props 被设置为 true，route.params 将会被设置为组件属性。
+    // props: true
+    //如果 props 是一个对象，它会被按原样设置为组件属性
+    // props: {
+    //   name: 'world'
+    // },
+    props: (route) => {
+      let date = new Date()
+      return {
+        name: date.getDate() + route.params.id
+      }
+    }
+  }
 ]
 
 // 3.创建router实例
