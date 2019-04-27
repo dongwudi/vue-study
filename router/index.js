@@ -8,19 +8,19 @@ import slider from '../components/slider';
 import fault from '../components/fault';
 
 // 2.定义路由
-//注意：视图组件是components
+// 定义路由的时候可以配置 meta 字段：
 const routes = [
   {
-    path: '/',
-    component: fault
-  },
-  {
-    path: '/slider/:id',
+    path: '/slider',
     component: main,
-    //路由独享守卫
-    beforeEnter: (to, from, next) => {
-      // ...
-    }
+    children: [
+      {
+        path: 'child',
+        component: slider,
+        meta : { requiresAuth: true }
+        // /slider/child 这个 URL 将会匹配父路由记录以及子路由记录
+      }
+    ]
   }
 ]
 
