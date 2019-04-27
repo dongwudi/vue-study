@@ -8,10 +8,10 @@
 </head>
 <body>
   <div id="app">
-  <router-link to="/child/123">child</router-link>
-  <router-link to="/slider/124">slider</router-link>
+  <!-- 记住参数或查询的改变并不会触发进入/离开的导航守卫。你可以通过观察 $route 对象来应对这些变化，或使用 beforeRouteUpdate 的组件内守卫 -->
+  <router-link to="/slider/124">slider 124</router-link>
+  <router-link to="/slider/123">slider 123</router-link>
   <router-view></router-view>
-  <router-view name="slider"></router-view>
   </div>
 </body>
 </html>
