@@ -12,3 +12,10 @@ new Vue({
   }
 });
 
+console.log(store.state.a.count);
+// console.log(store.state.b.count);
+store.commit('a/increment');
+console.log(store.state.a.count);
+console.log(store.getters['a/doubleCount']);
+store.dispatch('a/incrementIfOddOnRootSum');
+console.log(store.state.a.count);

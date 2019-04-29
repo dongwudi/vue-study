@@ -1,25 +1,30 @@
 export default {
-    state: {
+  namespaced: true,
+  state: {
     count: 0
   },
   getters:{
-    addCount: state => {
-      let count = state.count;
-      return ++count;
+    doubleCount (state) {
+      return state.count * 2
     }
   },
   mutations: {
-    addCountN(state, payload) {
-      state.count += payload
+    increment (state) {
+      state.count++
     }
   },
   // ction 提交的是 mutation，而不是直接变更状态。
   // Action 可以包含任意异步操作。
   actions: {
-    addCountNAsync (context, payload) {
-      setTimeout (()=>{
-        context.commit('addCountN',payload)
-      },1000) 
+    incrementIfOdd ({state, commit}) {
+      if(state.count % 2 === 1){
+        commit('increment')
+      }
+    },
+    incrementIfOddOnRootSum ({ state, commit, rootState }) {
+      if ((state.count + rootState.count) % 2 === 1) {
+        commit('increment')
+      }
     }
   },
 }
