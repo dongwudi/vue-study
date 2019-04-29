@@ -8,9 +8,11 @@
 </head>
 <body>
   <div id="app">
-  <!-- 记住参数或查询的改变并不会触发进入/离开的导航守卫。你可以通过观察 $route 对象来应对这些变化，或使用 beforeRouteUpdate 的组件内守卫 -->
-  <router-link to="/slider/child">slider child</router-link>
-  <router-view></router-view>
+    <p>{{ count }}</p>
+    <p>
+      <button @click="increment">+</button>
+      <button @click="decrement">-</button>
+    </p>
   </div>
 </body>
 </html>
