@@ -1,26 +1,14 @@
 import Vue from 'vue/dist/vue.esm';
 import router from '../router';
 import store from '../vuex';
+import App from '../components/App';
 
-const app = new Vue({
+new Vue({
   el: '#app',
   router,
-  data: {
-
-  },
-  computed: {
-    count () {
-	    return store.state.count
-    }
-  },
-  methods: {
-    increment () {
-      store.commit('increment')
-    },
-    decrement () {
-    	store.commit('decrement')
-    }
+  store,
+  components:{
+    App
   }
 });
 
-window.app = app;
