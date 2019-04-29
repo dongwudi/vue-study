@@ -1,10 +1,5 @@
-import Vue from 'vue/dist/vue.esm';
-import Vuex from 'vuex';
-
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
-  state: {
+export default {
+    state: {
     count: 0
   },
   getters:{
@@ -27,6 +22,4 @@ const store = new Vuex.Store({
       },1000) 
     }
   },
-})
-
-export default store;
+}
