@@ -26,6 +26,8 @@ export default {
   ]),
   created () {
     this.$store.dispatch('products/getAllProducts')
+
+    console.log(this.$store)
   }
 }
 </script>

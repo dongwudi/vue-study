@@ -58,6 +58,7 @@ export class Store {
 
     // 保存 state
     const state = this._modules.root.state
+    console.log(this._modules.root)
 
     // init root module.
     // this also recursively registers all sub-modules
@@ -107,11 +108,15 @@ export class Store {
       }
       return
     }
+
+    // 遍历这个 type 对应的 mutation 对象数组，执行 handler(payload)
     this._withCommit(() => {
       entry.forEach(function commitIterator (handler) {
         handler(payload)
       })
     })
+
+    // 通知所有订阅者 (_subscribers: 订阅（注册监听） store 的 mutation)
     this._subscribers.forEach(sub => sub(mutation, this.state))
 
     if (
@@ -227,6 +232,7 @@ export class Store {
     resetStore(this, true)
   }
 
+  // 保证在同步修改 state 的过程中 this._committing 的值始终为true
   _withCommit (fn) {
     const committing = this._committing
     this._committing = true
@@ -235,6 +241,7 @@ export class Store {
   }
 }
 
+// 保存回调到 _subscribers 中,并返回解除当前函数对mutation监听的函数
 function genericSubscribe (fn, subs) {
   if (subs.indexOf(fn) < 0) {
     subs.push(fn)
@@ -268,6 +275,7 @@ function resetStoreVM (store, state, hot) {
   store.getters = {}
   const wrappedGetters = store._wrappedGetters
   const computed = {}
+  // this.$store.getters.xxxgetters -> store._vm[xxxgetters]
   forEachValue(wrappedGetters, (fn, key) => {
     // use computed to leverage its lazy-caching mechanism
     // direct inline function use will lead to closure preserving oldVm.
@@ -283,7 +291,9 @@ function resetStoreVM (store, state, hot) {
   // suppress warnings just in case the user has added
   // some funky global mixins
   const silent = Vue.config.silent
+  // 在new一个Vue实例的过程中不会报出一切警告
   Vue.config.silent = true
+  // new一个vue实例, 响应式 state->state, computed->getter
   store._vm = new Vue({
     data: {
       $$state: state
@@ -293,10 +303,13 @@ function resetStoreVM (store, state, hot) {
   Vue.config.silent = silent
 
   // enable strict mode for new vm
+  // 保证修改store只能通过mutation
   if (store.strict) {
     enableStrictMode(store)
   }
 
+  // 函数每次都会创建新的 Vue 实例并赋值到 store._vm
+  // 这里将旧的 _vm 对象的状态设置为 null，并调用 $destroy 方法销毁这个旧的 _vm 对象
   if (oldVm) {
     if (hot) {
       // dispatch changes in all subscribed watchers
@@ -344,12 +357,14 @@ function installModule (store, rootState, path, module, hot) {
 
   // 遍历注册mutation
   module.forEachMutation((mutation, key) => {
+    // cart/pushProductToCart
     const namespacedType = namespace + key
     registerMutation(store, namespacedType, mutation, local)
   })
 
   // 遍历注册action
   module.forEachAction((action, key) => {
+    // {root: true} -> 在带命名空间的模块注册全局 action
     const type = action.root ? key : namespace + key
     const handler = action.handler || action
     registerAction(store, type, handler, local)
@@ -458,14 +473,18 @@ function makeLocalGetters (store, namespace) {
   return gettersProxy
 }
 
+// 处理mutation
 function registerMutation (store, type, handler, local) {
   // store._mutations[type]判断，不存在就赋值空数组
   const entry = store._mutations[type] || (store._mutations[type] = [])
+  // 将mutation的包装函数push到对应的mutation对象数组
   entry.push(function wrappedMutationHandler (payload) {
+    // 调用我们设置的mutation的回调函数 --> commit触发
     handler.call(store, local.state, payload)
   })
 }
 
+// 处理action
 function registerAction (store, type, handler, local) {
   const entry = store._actions[type] || (store._actions[type] = [])
   entry.push(function wrappedActionHandler (payload, cb) {
@@ -477,6 +496,7 @@ function registerAction (store, type, handler, local) {
       rootGetters: store.getters,
       rootState: store.state
     }, payload, cb)
+    // 返回值如果不是Promise对象就包装成一个Promise对象
     if (!isPromise(res)) {
       res = Promise.resolve(res)
     }
@@ -491,6 +511,7 @@ function registerAction (store, type, handler, local) {
   })
 }
 
+// 处理getter
 function registerGetter (store, type, rawGetter, local) {
   if (store._wrappedGetters[type]) {
     if (process.env.NODE_ENV !== 'production') {

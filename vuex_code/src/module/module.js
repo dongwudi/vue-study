@@ -67,6 +67,7 @@ export default class Module {
   }
 
   forEachMutation (fn) {
+    // 存在mutations 就遍历
     if (this._rawModule.mutations) {
       forEachValue(this._rawModule.mutations, fn)
     }

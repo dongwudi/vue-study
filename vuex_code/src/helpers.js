@@ -4,6 +4,30 @@
  * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
  * @param {Object}
  */
+
+// computed: mapState({
+//   // 箭头函数可以让代码非常简洁
+//   count: state => state.count,
+//   // 传入字符串 'count' 等同于 `state => state.count`
+//   countAlias: 'count',
+//   // 想访问局部状态，就必须借助于一个普通函数，函数中使用 `this` 获取局部状态
+//   countPlusLocalState (state) {
+//     return state.count + this.localCount
+//   }
+// })
+
+// computed: {
+//   count() {
+//   return this.$store.state.count
+//   },
+//   countAlias() {
+//   return this.$store.state['count']
+//   },
+//   countPlusLocalState() {
+//     return this.$store.state.count + this.localCount
+//   }
+// }
+
 export const mapState = normalizeNamespace((namespace, states) => {
   const res = {}
   normalizeMap(states).forEach(({ key, val }) => {
@@ -25,6 +49,7 @@ export const mapState = normalizeNamespace((namespace, states) => {
     // mark vuex getter for devtools
     res[key].vuex = true
   })
+  // console.log(res)
   return res
 })
 
@@ -61,6 +86,24 @@ export const mapMutations = normalizeNamespace((namespace, mutations) => {
  * @param {Object|Array} getters
  * @return {Object}
  */
+
+// computed: {
+//   // 使用对象扩展操作符把 getter 混入到 computed 中
+//   ...mapGetters([
+//     'doneTodosCount',
+//     'anotherGetter',
+//     // ...
+//   ])
+// }
+
+// computed: {
+//   doneTodosCount() {
+//     return this.$store.getters['doneTodosCount']
+//   },
+//   anotherGetter() {
+//     return this.$store.getters['anotherGetter']
+//   }
+// }
 export const mapGetters = normalizeNamespace((namespace, getters) => {
   const res = {}
   normalizeMap(getters).forEach(({ key, val }) => {
@@ -88,6 +131,24 @@ export const mapGetters = normalizeNamespace((namespace, getters) => {
  * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
  * @return {Object}
  */
+
+// methods: {
+//   ...mapActions([
+//     'increment' // 映射 this.increment() 到 this.$store.dispatch('increment')
+//   ]),
+//   ...mapActions({
+//     add: 'increment' // 映射 this.add() to this.$store.dispatch('increment')
+//   })
+// }
+
+// methods: {
+//   increment(...args) {
+//     return this.$store.dispatch.apply(this.$store, ['increment'].concat(args))
+// }
+//   add(...args) {
+//     return this.$store.dispatch.apply(this.$store, ['increment'].concat(args))
+// }
+// }
 export const mapActions = normalizeNamespace((namespace, actions) => {
   const res = {}
   normalizeMap(actions).forEach(({ key, val }) => {
