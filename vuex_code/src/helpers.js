@@ -189,6 +189,7 @@ export const createNamespacedHelpers = (namespace) => ({
  * @param {Array|Object} map
  * @return {Object}
  */
+// map 处理
 function normalizeMap (map) {
   return Array.isArray(map)
     ? map.map(key => ({ key, val: key }))
@@ -200,6 +201,7 @@ function normalizeMap (map) {
  * @param {Function} fn
  * @return {Function}
  */
+// namespace 处理
 function normalizeNamespace (fn) {
   return (namespace, map) => {
     if (typeof namespace !== 'string') {

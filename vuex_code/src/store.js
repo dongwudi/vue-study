@@ -58,7 +58,7 @@ export class Store {
 
     // 保存 state
     const state = this._modules.root.state
-    console.log(this._modules.root)
+    // console.log(this._modules.root)
 
     // init root module.
     // this also recursively registers all sub-modules
@@ -324,9 +324,9 @@ function resetStoreVM (store, state, hot) {
 
 // this, state, [], this._modules.root
 function installModule (store, rootState, path, module, hot) {
-  // 是否为根
+  // 是否为根Module
   const isRoot = !path.length
-  // 获取module的Namespace  cart => cart/
+  // 获取module的完整Namespace   （传入完整的路径） ["cart", "cart_child"]  --> 获得 cart/cart_child/
   const namespace = store._modules.getNamespace(path)
 
   // register in namespace map
@@ -351,7 +351,7 @@ function installModule (store, rootState, path, module, hot) {
     })
   }
 
-  // 设置module上下文
+  // 设置module本地上下文
   // store cart/ ["cart"]
   const local = module.context = makeLocalContext(store, namespace, path)
 
@@ -392,6 +392,7 @@ function makeLocalContext (store, namespace, path) {
   const noNamespace = namespace === ''
 
   const local = {
+    // 根据namespace布尔值进行判断，false直接返回Store实例的dispatch, true 则返回前对参数进行修改
     dispatch: noNamespace ? store.dispatch : (_type, _payload, _options) => {
       // 统一格式
       const args = unifyObjectStyle(_type, _payload, _options)
@@ -449,7 +450,6 @@ function makeLocalGetters (store, namespace) {
   const gettersProxy = {}
 
   const splitPos = namespace.length
-
   // store.getters => cart/cartProducts
   // namespace => cart/
   Object.keys(store.getters).forEach(type => {
@@ -458,12 +458,14 @@ function makeLocalGetters (store, namespace) {
     if (type.slice(0, splitPos) !== namespace) return
 
     // extract local getter type
+    // cartProducts
     const localType = type.slice(splitPos)
 
     // Add a port to the getters proxy.
     // Define as getter property because
     // we do not want to evaluate the getters in this time.
-    // 加一层代理
+    // 加一层代理 --> 可以使得当前本地上下文访问 store实例下的getter
+    // cart -> getter[cartProducts]  === store-> getter[cart/cartProducts]
     Object.defineProperty(gettersProxy, localType, {
       get: () => store.getters[type],
       enumerable: true

@@ -11,6 +11,7 @@ export default class ModuleCollection {
   // 根据path获取module
   get (path) {
     return path.reduce((module, key) => {
+      // Module 的getChild
       return module.getChild(key)
     }, this.root)
   }
@@ -19,6 +20,7 @@ export default class ModuleCollection {
   getNamespace (path) {
     let module = this.root
     return path.reduce((namespace, key) => {
+      // 注意：这里把module重新赋值
       module = module.getChild(key)
       return namespace + (module.namespaced ? key + '/' : '')
     }, '')
@@ -55,8 +57,12 @@ export default class ModuleCollection {
 
     // register nested modules
     // 注册嵌套模块(modules属性存在)
+    // modules: {
+    //   mod1: {}
+    // }
     if (rawModule.modules) {
       forEachValue(rawModule.modules, (rawChildModule, key) => {
+        // [mod1] {}
         this.register(path.concat(key), rawChildModule, runtime)
       })
     }

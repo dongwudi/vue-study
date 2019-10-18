@@ -88,5 +88,16 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
+  modules: {
+    cart_child: {
+      namespaced: true,
+      state: {
+        a: 1
+      },
+      getters: {
+        red: (state) => state.a + 1
+      }
+    }
+  }
 }
