@@ -343,7 +343,7 @@ function installModule (store, rootState, path, module, hot) {
   if (!isRoot && !hot) {
     // 根据path获取父state
     const parentState = getNestedState(rootState, path.slice(0, -1))
-    // 当前module
+    // 当前modulename
     const moduleName = path[path.length - 1]
     store._withCommit(() => {
       // 通过Vue.set将state设置为响应式
@@ -376,8 +376,10 @@ function installModule (store, rootState, path, module, hot) {
     registerGetter(store, namespacedType, getter, local)
   })
 
-  // 注册子module
+  // 注册子module this._children.forEach
   module.forEachChild((child, key) => {
+    // console.log(child)
+    // console.log(key)
     installModule(store, rootState, path.concat(key), child, hot)
   })
 }
@@ -475,7 +477,7 @@ function makeLocalGetters (store, namespace) {
   return gettersProxy
 }
 
-// 处理mutation
+// 处理mutation === handler
 function registerMutation (store, type, handler, local) {
   // store._mutations[type]判断，不存在就赋值空数组
   const entry = store._mutations[type] || (store._mutations[type] = [])
