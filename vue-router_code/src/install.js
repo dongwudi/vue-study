@@ -28,7 +28,7 @@ export function install (Vue) {
       if (isDef(this.$options.router)) {
         this._routerRoot = this
         this._router = this.$options.router
-        // 初始化
+        // 初始化 router实例的init方法执行
         this._router.init(this)
         // 响应式 _route 对象 --> this._router.history.current
         Vue.util.defineReactive(this, '_route', this._router.history.current)

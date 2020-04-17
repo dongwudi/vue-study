@@ -96,6 +96,7 @@ export default class VueRouter {
 
     // set up app destroyed handler
     // https://github.com/vuejs/vue-router/issues/2639
+    // 防止内存泄露
     app.$once('hook:destroyed', () => {
       // clean out app from this.apps array once destroyed
       const index = this.apps.indexOf(app)
@@ -107,6 +108,7 @@ export default class VueRouter {
 
     // main app previously initialized
     // return as we don't need to set up new history listener
+    // 代表已经初始化了-> 根vue
     if (this.app) {
       return
     }
@@ -115,7 +117,7 @@ export default class VueRouter {
 
     const history = this.history
 
-    // 进来不是默认页，对 HTML5History， HashHistory 分别处理
+    // 拿到当前的 this.history，对 HTML5History， HashHistory 分别处理
     if (history instanceof HTML5History) {
       history.transitionTo(history.getCurrentLocation())
     } else if (history instanceof HashHistory) {

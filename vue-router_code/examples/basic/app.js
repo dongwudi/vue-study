@@ -56,7 +56,6 @@ new Vue({
       <router-view class="view"></router-view>
     </div>
   `,
-
   methods: {
     navigateAndIncrement () {
       const increment = () => this.n++
